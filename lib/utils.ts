@@ -188,11 +188,14 @@ export function decryptId(id: string) {
 }
 
 export const getTransactionStatus = (date: Date) => {
-  const today = new Date();
-  const twoDaysAgo = new Date(today);
-  twoDaysAgo.setDate(today.getDate() - 2);
+  const now = new Date();
+  const transactionTime = new Date(date);
 
-  return date > twoDaysAgo ? "Processing" : "Success";
+  // Check if the transaction is within the last 1 minute
+  const timeDifference = now.getTime() - transactionTime.getTime();
+  const oneMinute = 60 * 1000; // 1 minute in milliseconds
+
+  return timeDifference < oneMinute ? "Processing" : "Success";
 };
 
 export const authFormSchema = (type: string) => z.object({
